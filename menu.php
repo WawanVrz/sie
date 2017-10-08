@@ -16,13 +16,34 @@
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">widgets</i>
-                <span>Grafik</span>
+                <span>Grafik Pendapatan</span>
             </a>
             <ul class="ml-menu">
-              <li><a href=""> Perbandingan Cabang </a></li>
-              <li><a href="pages/charts/grafikmahasiswa.php"> Perbandingan Mahasiswa </a></li>
-              <li><a href="pages/charts/grafikpendapatan.php"> Pendapatan </a></li>
-              <li><a href="pages/charts/grafikpengeluaran.php"> Pengeluaran </a></li>
+              <li><a href="pages/charts/grafikpendapatan.php"> Pendapatan Per Tahun</a></li>
+              <li><a href="pages/charts/grafikpendapatan.php"> Pendapatan Per Tahun Per Cabang</a></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);" class="menu-toggle">
+                <i class="material-icons">widgets</i>
+                <span>Grafik Pengeluaran</span>
+            </a>
+            <ul class="ml-menu">
+              <li><a href="pages/charts/grafikpengeluaran.php"> Pengeluaran Per Tahun</a></li>
+              <li><a href="pages/charts/grafikpengeluaran.php"> Pengeluaran Per Tahun Per Cabang</a></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);" class="menu-toggle">
+                <i class="material-icons">widgets</i>
+                <span>Grafik Mahasiswa</span>
+            </a>
+            <ul class="ml-menu">
+            <li><a href="pages/charts/grafikmahasiswaperjurusan.php"> Mahasiswa Per Jurusan</a></li>
+              <li><a href="pages/charts/grafikmahasiswa.php"> Mahasiswa Per Tahun</a></li>
+              <li><a href="pages/charts/grafikmahasiswa.php"> Mahasiswa Per Tahun Per Cabang</a></li>
             </ul>
         </li>
 
