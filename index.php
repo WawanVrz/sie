@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Sign In | Bootstrap Based Admin Template - Material Design</title>
+    <title>Sign In | Sistem Informasi Enterprise</title>
     <!-- Favicon-->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
@@ -60,14 +60,14 @@
                             <button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>
                         </div>
                     </div>
-                    <div class="row m-t-15 m-b--20">
+                    <!--<div class="row m-t-15 m-b--20">
                         <div class="col-xs-6">
                             <a href="sign-up.html">Register Now!</a>
                         </div>
                         <div class="col-xs-6 align-right">
                             <a href="forgot-password.html">Forgot Password?</a>
                         </div>
-                    </div>
+                    </div>-->
                 </form>
             </div>
         </div>

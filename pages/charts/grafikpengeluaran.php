@@ -111,12 +111,12 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">ADMINBSB - MATERIAL DESIGN</a>
+                <a class="navbar-brand" href="index.html"><img src="../../images/logo.png" width="200" height="60" style="margin-top:-20px; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SIE - Sistem Informasi Enterprise Monarch Bali</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Call Search -->
-                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
+                    <!--<li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>-->
                     <!-- #END# Call Search -->
                     <!-- Notifications -->
                     <!-- <li class="dropdown">
