@@ -41,9 +41,10 @@
                 <span>Grafik Mahasiswa</span>
             </a>
             <ul class="ml-menu">
-            <li><a href="pages/charts/grafikmahasiswaperjurusan.php"> Mahasiswa Per Jurusan</a></li>
               <li><a href="pages/charts/grafikmahasiswa.php"> Mahasiswa Per Tahun</a></li>
-              <li><a href="pages/charts/grafikmahasiswa.php"> Mahasiswa Per Tahun Per Cabang</a></li>
+              <li><a href="pages/charts/grafikmahasiswapertahunsearch.php"> Mahasiswa Per Tahun Per Cabang</a></li>
+              <li><a href="pages/charts/grafikmahasiswaperjurusan.php"> Mahasiswa Per Jurusan</a></li>
+              <li><a href="pages/charts/grafikmahasiswaperjurusansearch.php"> Mahasiswa Per Jurusan Per Cabang</a></li>
             </ul>
         </li>
 
