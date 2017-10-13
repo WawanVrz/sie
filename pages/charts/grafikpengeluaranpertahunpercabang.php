@@ -1,17 +1,24 @@
 ﻿<!DOCTYPE html>
 <?php
 	define('HOST','localhost');
-  define('USER','root');
+    define('USER','root');
 	define('PASS','');
 	define('DB','siedb');
 
-	$db = mysqli_connect(HOST,USER,PASS,DB) or die ('Unable to Connect');
-
-    $result = $db->query("SELECT tp.id_jurusan, tj.nama_jurusan, tj.biaya, sum(tj.biaya) as totalbiaya, tp.thn_daftar as tahun from tbpeserta tp JOIN tbjurusan tj ON tj.id_jurusan = tp.id_jurusan GROUP by tp.thn_daftar ORDER BY tp.thn_daftar ASC");
-
+    $db = mysqli_connect(HOST,USER,PASS,DB) or die ('Unable to Connect');
+    
+    $tahn1 = isset($_GET['tahun1']) ? $_GET['tahun1'] : '';
+    $tahn2 = isset($_GET['tahun2']) ? $_GET['tahun2'] : '';
+    $cab = isset($_GET['cabang']) ? $_GET['cabang'] : '';
+    $result = $db->query("SELECT tahun, SUM(biaya) AS jumlah FROM `tbpengeluaran` WHERE id_cab = $cab AND tahun BETWEEN $tahn1 AND $tahn2 GROUP by tahun");
+    $resultcabang = $db->query("SELECT * FROM tbcabang");
 ?>
 <html>
 <head>
+<!-- if(isset($_POST['simpan']))
+                        {
+                            echo $_GET['tahun'];
+                        } -->
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Welcome To | SIE - SISTEM INFORMASI ENTERPRISE</title>
@@ -40,66 +47,40 @@
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
+        <!-- Bootstrap Select Css -->
+        <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
 
     <!-- =============================================== FUNCTION GOOGLE CHARTS ================================= -->
-				<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-				<script type="text/javascript">
-				google.charts.load('current', {'packages':['corechart']});
-				google.charts.setOnLoadCallback(drawChart);
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
 
-				function drawChart() {
+    function drawChart() {
 
-				var data = google.visualization.arrayToDataTable([
-					['Dana Tahun', 'Total Pengeluaran'],
-					<?php
-					//if($result->num_rows > 0){
-						//	while($row = $result->fetch_assoc()){
-							//	echo "['".$row['tahun']."', ".$row['jumlah']."],";
-							//}
-					//}
-					?>
-				]);
+    var data = google.visualization.arrayToDataTable([
+        ['Dana Tahun', 'Total Pengeluaran'],
+        <?php
+        if($result->num_rows > 0){
+                while($row = $result->fetch_assoc()){
+                    echo "['".$row['tahun']."', ".$row['jumlah']."],";
+                }
+        }
+        ?>
+    ]);
 
-				var options = {
-						title: 'Grafik Pengeluaran',
-						width: 900,
-						height: 500,
-				};
+    var options = {
+            title: 'Grafik Pengeluaran',
+            width: 900,
+            height: 500,
+    };
 
-				var chart = new google.visualization.LineChart(document.getElementById('line'));
+    var chart = new google.visualization.LineChart(document.getElementById('line'));
 
-				chart.draw(data, options);
-				}
-                </script> -->
-                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-				<script type="text/javascript">
-				google.charts.load('current', {'packages':['corechart']});
-				google.charts.setOnLoadCallback(drawChart);
-
-				function drawChart() {
-
-				var data = google.visualization.arrayToDataTable([
-					['Tahun', 'Total Pendapatan'],
-					<?php
-					if($result->num_rows > 0){
-							while($row = $result->fetch_assoc()){
-								echo "['".$row['tahun']."', ".$row['totalbiaya']."],";
-							}
-					}
-					?>
-				]);
-
-				var options = {
-						title: 'Grafik Pendapatan',
-						width: 900,
-						height: 500,
-				};
-
-				var chart = new google.visualization.LineChart(document.getElementById('line'));
-
-				chart.draw(data, options);
-				}
-				</script>
+    chart.draw(data, options);
+    }
+    </script>
     <!-- ========================================================================================================= -->
 </head>
 
@@ -378,7 +359,7 @@
                             <span>Monarch Bali</span>
                         </a>
                     </li>
-                    <li>										<li>
+										<li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">widgets</i>
                             <span>Grafik</span>
@@ -389,6 +370,8 @@
                           <li><a href="grafikpendapatan.php"> Pendapatan </a></li>
                           <li><a href="grafikpengeluaran.php"> Pengeluaran </a></li>
                         </ul>
+                    </li>
+
             <!-- #Footer -->
         </aside>
         <!-- #END# Left Sidebar -->
@@ -541,36 +524,89 @@
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    GRAFIK PENDAPATAN DANA MONARCH
+                    GRAFIK JUMLAH PENGELUARAN PER TAHUN PER CABANG
                 </h2>
             </div>
+			<div class="row clearfix">
+                <!-- Line Chart -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Grafik Jumlah Pengeluaran Per Tahun Per Cabang</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
 
-						<!-- Exportable Table -->
-						<div class="row clearfix">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-										<div class="card">
-												<div class="header">
-														<h5>
-																Data Pendapatan Dana Monarch
-														</h5>
-														<ul class="header-dropdown m-r--5">
-																<li class="dropdown">
-																		<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-																				<i class="material-icons">more_vert</i>
-																		</a>
-																		<ul class="dropdown-menu pull-right">
-																				<li><a href="javascript:void(0);">Action</a></li>
-																				<li><a href="javascript:void(0);">Another action</a></li>
-																				<li><a href="javascript:void(0);">Something else here</a></li>
-																		</ul>
-																</li>
-														</ul>
-												</div>
-												<div id="line"></div>
-										</div>
-								</div>
-						</div>
-						<!-- #END# Exportable Table -->
+
+                        <?php
+                        //echo '<pre>'; print_r($_GET);
+                        ?>
+
+                        <form action="grafikpengeluaranpertahunpercabang.php" method="get" enctype="multipart/form-data">
+                            <div class="row clearfix">
+                                    <div class="col-sm-4">
+                                        <select name="cabang" class="form-control show-tick">
+                                            <option value="">-- Pilih Cabang --</option>
+                                            <?php 
+                                                while($row=mysqli_fetch_assoc($resultcabang)) { 
+                                                    echo "<option value='$row[id_cab]'>$row[nama_cab]</option>"; 
+                                                } 
+                                            ?> 
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    <select name="tahun1" class="form-control show-tick">
+                                        <option value="">-- Pilih Tahun Awal --</option>
+                                        <?php
+                                            date_default_timezone_set("Asia/Jakarta");
+                                            $now=(date('Y'));
+                                            for ($a=2010;$a<=$now;$a++)
+                                            {
+                                                echo "<option value='$a'>$a</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    <select name="tahun2" class="form-control show-tick">
+                                        <option value="">-- Pilih Tahun Akhir --</option>
+                                        <?php
+                                            date_default_timezone_set("Asia/Jakarta");
+                                            $now=(date('Y'));
+                                            for ($b=2010;$b<=$now;$b++)
+                                            {
+                                                echo "<option value='$b'>$b</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" style="background-color: #05007E !important;" class="btn btn-primary waves-effect">Cari</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form> 
+                        
+                        <hr>
+
+                        <div id="line"></div>
+                    </div>
+
+                   
+                </div>
+                <!-- #END# Line Chart -->
+            </div>
         </div>
     </section>
 
@@ -599,6 +635,9 @@
     <script src="../../plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
     <script src="../../plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
     <script src="../../plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+
+        <!-- Select Plugin Js -->
+        <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
     <!-- Custom Js -->
     <script src="../../js/admin.js"></script>

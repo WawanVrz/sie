@@ -20,7 +20,7 @@
             </a>
             <ul class="ml-menu">
               <li><a href="pages/charts/grafikpendapatan.php"> Pendapatan Per Tahun</a></li>
-              <li><a href="pages/charts/grafikpendapatan.php"> Pendapatan Per Tahun Per Cabang</a></li>
+              <li><a href="pages/charts/grafikpendapatanpertahunpercabang.php"> Pendapatan Per Tahun Per Cabang</a></li>
             </ul>
         </li>
 
@@ -31,7 +31,7 @@
             </a>
             <ul class="ml-menu">
               <li><a href="pages/charts/grafikpengeluaran.php"> Pengeluaran Per Tahun</a></li>
-              <li><a href="pages/charts/grafikpengeluaran.php"> Pengeluaran Per Tahun Per Cabang</a></li>
+              <li><a href="pages/charts/grafikpengeluaranpertahunpercabang.php"> Pengeluaran Per Tahun Per Cabang</a></li>
             </ul>
         </li>
 
