@@ -264,7 +264,7 @@
                         </ul>
                     </li> -->
                     <!-- #END# Tasks -->
-                    <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
+                    <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons input">more_vert</i></a></li>
                 </ul>
             </div>
         </div>
@@ -285,7 +285,7 @@
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li><a href="index.php"><i class="material-icons">input</i>Sign Out</a></li>
                         </ul>
                     </div>
                 </div>

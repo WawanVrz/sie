@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <?php
+    session_start();
 	define('HOST','localhost');
     define('USER','root');
 	define('PASS','');
@@ -11,13 +12,12 @@
     $cab = isset($_GET['cabang']) ? $_GET['cabang'] : '';
     $result = $db->query("SELECT count(*) as jumlah,thn_daftar FROM tbpeserta where id_cab = $cab AND thn_daftar = $tahn GROUP BY `thn_daftar` ORDER BY thn_daftar ASC ");
     $resultcabang = $db->query("SELECT * FROM tbcabang");
+
+    $_SESSION['tahunset'] = $tahn;
+    $_SESSION['cabangset'] = $cab;
 ?>
 <html>
 <head>
-<!-- if(isset($_POST['simpan']))
-                        {
-                            echo $_GET['tahun'];
-                        } -->
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Welcome To | SIE - SISTEM INFORMASI ENTERPRISE</title>
@@ -46,15 +46,58 @@
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
-        <!-- Bootstrap Select Css -->
-        <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
+    <style>
+    .buttons button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    }
 
+    .buttons button:last-child {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    button {
+        color:#111;
+        background-image: linear-gradient(to bottom,#ffffff 0,#777777 100%);
+        background-repeat: repeat-x;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        cursor: pointer;
+        border-width:1px;
+        border-color: #777;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.1);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+    }
+    button:hover{
+        color:#fff;
+        background-image: linear-gradient(to top,#337ab7 0,#265a88 100%);
+    }
+
+    .custom{
+        text-align: center;
+        width: 100%;
+        background: inherit !important;
+        color: #000;
+    }
+    </style>
+
+<script src="../../js/xepOnline.jqPlugin.js"></script>
     <!-- =============================================== FUNCTION GOOGLE CHARTS ================================= -->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
+
+        function AddNamespace(){
+            var svg = jQuery('#piechart');
+            svg.attr("xmlns", "http://www.w3.org/2000/svg");
+            svg.css('overflow','visible');
+        }
 
         function drawChart() {
 
@@ -70,14 +113,19 @@
             ]);
 
             var options = {
-                title: 'Perbandingan Mahasiswa Dari Tahun Masuk',
+                title: 'Perbandingan Mahasiswa Monarch Dari Tahun Masuk Pertahun',
                 width: 900,
                 height: 500,
             };
 
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
+            google.visualization.events.addListener(chart, 'ready', AddNamespace)
+
             chart.draw(data, options);
+
+            var click="return xepOnline.Formatter.Format('JSFiddle', {render:'download', srctype:'svg'})";
+            jQuery('#buttons').append('<button class="btn btn-info waves-effect custom" onclick="'+ click +'">Export PDF Chart</button>');
         }
         </script>
     <!-- ========================================================================================================= -->
@@ -538,21 +586,14 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                        <li><a href="../../export-mahasiswa-percabang-pertahun.php" class="btn btn-info waves-effect custom">Export PDF Data Table</a></li>
+                                        <li><div id="buttons"></div></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
-
-
-                        <?php
-                        //echo '<pre>'; print_r($_GET);
-                        ?>
-
-                        <form action="grafikmahasiswapertahunsearch.php" method="get" enctype="multipart/form-data">
+                        <form id="form" action="grafikmahasiswapertahunsearch.php" method="get">
                             <div class="row clearfix">
                                     <div class="col-sm-5">
                                         <select name="cabang" class="form-control show-tick">
@@ -578,15 +619,15 @@
                                     </select>
                                     </div>
                                     <div class="col-sm-2">
-                                        <button type="submit" style="background-color: #05007E !important;" class="btn btn-primary waves-effect">Cari</button>
+                                        <button id="raaagh" type="submit" style="background-color: #05007E !important;" class="btn btn-primary waves-effect">Cari</button>
                                     </div>
                                 </div>
                             </div>
-                        </form> 
-                        
+                        </form>              
                         <hr>
-
-                        <div id="piechart"></div>
+                        <div id="JSFiddle">
+                          <div id="piechart"></div>
+                        </div>
                     </div>
 
                    
@@ -632,5 +673,20 @@
     <!-- Demo Js -->
     <script src="../../js/demo.js"></script>
 </body>
-
+<script type = "text/javascript">
+  jQuery(document).ready(function($){
+    $('#form').on('submit',function(){
+      var form_data = $(this).serialize();
+          $.ajax({
+              url: "/pages/charts/grafikmahasiswapertahunsearch.php?cabang=1&tahun=2017",
+              type: 'GET',
+              data: form_data,
+              dataType: 'json',
+              success: function(data){
+                console.log(data);
+            }
+          });
+     });
+  });
+  </script>
 </html>

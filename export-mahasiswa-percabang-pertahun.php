@@ -9,11 +9,12 @@
     <p style="padding-left:0px; margin-top:-15px; text-align:center;">Dalung, Kuta Utara, Kabupaten Badung, Bali</p>
     <p style="padding-left:0px; margin-top:-15px; text-align:center;"> Telp. (0361) 9003675 </p>
     <hr>
-    <h3 align="center"> Table Data Mahasiswa Per Tahun - Monarch Bali </h3>
+    <h3 align="center"> Table Data Mahasiswa Per Cabang Per Tahun - Monarch Bali </h3>
     <table border="1" align="center" bordercolor="#ccc" STYLE="BORDER-COLLAPSE:COLLAPSE;" width="50%">
     <tr>
         <td align="center" width="10%"><b>No</b></td>
-        <td align="center" width="55%"><b>Tahun Masuk</b></td>
+        <td align="center" width="55%"><b>Nama Cabang</b></td>
+        <td align="center" width="55%"><b>Tahun</b></td>
         <td align="center" width="40%"><b>Jumlah</b></td>
     </tr>
      <?php
@@ -22,9 +23,14 @@
         define('PASS','');
         define('DB','siedb');
 
+        session_start();
+        
+        $tahn = $_SESSION['tahunset'];
+        $cab = $_SESSION['cabangset'];
+
         $db = mysqli_connect(HOST,USER,PASS,DB) or die ('Unable to Connect');
         $nomor = 0;
-		$query="select count(*) as jumlah,thn_daftar FROM tbpeserta GROUP BY `thn_daftar` ORDER BY thn_daftar ASC";
+		$query="SELECT count(*) as jumlah, tp.thn_daftar, tb.nama_cab FROM tbpeserta tp JOIN tbcabang tb ON tp.id_cab = tb.id_cab where tp.id_cab = $cab AND tp.thn_daftar = $tahn GROUP BY tp.`thn_daftar` ORDER BY tp.thn_daftar ASC";
 		$hasil = mysqli_query($db,$query);
 		if($hasil === FALSE)
 		{
@@ -33,10 +39,12 @@
 		while ($data = mysqli_fetch_array ($hasil))
 		{
 			$thn=$data['thn_daftar'];
-			$jumlah=$data['jumlah'];
+            $jumlah=$data['jumlah'];
+            $cbang=$data['nama_cab'];
 			$nomor++;
 			echo "<tr>";
-			echo "<td align='center'>".$nomor."</td>";
+            echo "<td align='center'>".$nomor."</td>";
+            echo "<td align='center'>".$cbang."</td>";
 			echo "<td align='center'>".$thn."</td>";
 			echo "<td align='center'>".$jumlah." Orang</td>";
 			echo "</tr>";
@@ -55,5 +63,5 @@
 	$dompdf->load_html($html);
 	$dompdf->setPaper('A4', 'portrait');
 	$dompdf->render();
-	$dompdf->stream('DataTable_Mahasiswa_Pertahun.pdf');
+	$dompdf->stream('DataTable_Mahasiswa_Percabang_Pertahun.pdf');
 ?>
