@@ -5,7 +5,6 @@
     define('USER','root');
 	define('PASS','');
 	define('DB','siedb');
-
     $db = mysqli_connect(HOST,USER,PASS,DB) or die ('Unable to Connect');
     
     $tahn = isset($_GET['tahun']) ? $_GET['tahun'] : '';

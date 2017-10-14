@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <?php
 	define('HOST','localhost');
-  define('USER','root');
+    define('USER','root');
 	define('PASS','');
 	define('DB','siedb');
 

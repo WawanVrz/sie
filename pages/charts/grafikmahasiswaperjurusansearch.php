@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <?php
+    session_start();
 	define('HOST','localhost');
     define('USER','root');
 	define('PASS','');
@@ -11,6 +12,9 @@
     $cab = isset($_GET['cabang']) ? $_GET['cabang'] : '';
     $result = $db->query("SELECT COUNT(tbpeserta.id_jurusan) as jumlahorang, tbjurusan.nama_jurusan as jurusan, tbjurusan.id_jurusan FROM tbpeserta JOIN tbjurusan ON tbjurusan.id_jurusan = tbpeserta.id_jurusan WHERE tbpeserta.id_cab = $cab AND tbpeserta.thn_daftar = $tahn GROUP by tbjurusan.id_jurusan ");
     $resultcabang = $db->query("SELECT * FROM tbcabang");
+
+    $_SESSION['tahunsetjurusan'] = $tahn;
+    $_SESSION['cabangsetjurusan'] = $cab;
 ?>
 <html>
 <head>
@@ -49,12 +53,55 @@
         <!-- Bootstrap Select Css -->
         <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
+        <style>
+    .buttons button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    }
 
+    .buttons button:last-child {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    button {
+        color:#111;
+        background-image: linear-gradient(to bottom,#ffffff 0,#777777 100%);
+        background-repeat: repeat-x;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        cursor: pointer;
+        border-width:1px;
+        border-color: #777;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.1);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+    }
+    button:hover{
+        color:#fff;
+        background-image: linear-gradient(to top,#337ab7 0,#265a88 100%);
+    }
+
+    .custom{
+        text-align: center;
+        width: 100%;
+        background: inherit !important;
+        color: #000;
+    }
+    </style>
+
+<script src="../../js/xepOnline.jqPlugin.js"></script>
     <!-- =============================================== FUNCTION GOOGLE CHARTS ================================= -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
+
+    function AddNamespace(){
+            var svg = jQuery('#piechart');
+            svg.attr("xmlns", "http://www.w3.org/2000/svg");
+            svg.css('overflow','visible');
+        }
 
     function drawChart() {
 
@@ -70,14 +117,19 @@
         ]);
 
         var options = {
-            title: 'Perbandingan Mahasiswa Per Jurusan',
+            title: 'Perbandingan Mahasiswa Monarch Percabang Pertahun',
             width: 900,
             height: 500,
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
+        google.visualization.events.addListener(chart, 'ready', AddNamespace)
+
         chart.draw(data, options);
+
+        var click="return xepOnline.Formatter.Format('JSFiddle', {render:'download', srctype:'svg'})";
+            jQuery('#buttons').append('<button class="btn btn-info waves-effect custom" onclick="'+ click +'">Export PDF Chart</button>');
     }
     </script>
     <!-- ========================================================================================================= -->
@@ -538,9 +590,8 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                        <li><a href="../../export-mahasiswa-percabang-perjurusan.php" class="btn btn-info waves-effect custom">Export PDF Data Table</a></li>
+                                        <li><div id="buttons"></div></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -583,10 +634,10 @@
                                 </div>
                             </div>
                         </form> 
-                        
                         <hr>
-
+                        <div id="JSFiddle">
                         <div id="piechart"></div>
+                      </div>
                     </div>
 
                    
