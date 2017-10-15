@@ -32,7 +32,8 @@
         $db = mysqli_connect(HOST,USER,PASS,DB) or die ('Unable to Connect');
         $nomor = 0;
 		$query="SELECT COUNT(tbpeserta.id_jurusan) as jumlahorang, tbjurusan.nama_jurusan as jurusan, tbjurusan.id_jurusan, tbcabang.nama_cab FROM tbpeserta JOIN tbjurusan ON tbjurusan.id_jurusan = tbpeserta.id_jurusan JOIN tbcabang ON tbpeserta.id_cab = tbcabang.id_cab WHERE tbpeserta.id_cab = $cab AND tbpeserta.thn_daftar = $tahn GROUP by tbjurusan.id_jurusan";
-		$hasil = mysqli_query($db,$query);
+
+        $hasil = mysqli_query($db,$query);
 		if($hasil === FALSE)
 		{
 			die(mysqli_error());
@@ -42,7 +43,8 @@
 			$jurusan=$data['jurusan'];
             $jumlah=$data['jumlahorang'];
             $cbang=$data['nama_cab'];
-			$nomor++;
+            $nomor++;
+            
 			echo "<tr>";
             echo "<td align='center'>".$nomor."</td>";
             echo "<td align='center'>".$cbang."</td>";
@@ -50,7 +52,7 @@
 			echo "<td align='center'>".$tahn."</td>";
 			echo "<td align='center'>".$jumlah." Orang</td>";
 			echo "</tr>";
-		}
+        }
 	 ?>
     </table>
  </body>

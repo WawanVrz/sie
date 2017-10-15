@@ -15,13 +15,18 @@
 
     $_SESSION['tahunsetjurusan'] = $tahn;
     $_SESSION['cabangsetjurusan'] = $cab;
+
+    $querycab='SELECT * FROM tbcabang where id_cab = "'.$cab.'"';
+    $hasilcabang = mysqli_query($db, $querycab) or die (mysqli_error($db)); 
+
+    while ($data = mysqli_fetch_array ($hasilcabang))
+    {
+        $cabangv2=$data['nama_cab'];
+        $_SESSION['cabangparseset'] = $cabangv2;
+    }
 ?>
 <html>
 <head>
-<!-- if(isset($_POST['simpan']))
-                        {
-                            echo $_GET['tahun'];
-                        } -->
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Welcome To | SIE - SISTEM INFORMASI ENTERPRISE</title>
@@ -583,7 +588,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Grafik Jumlah Mahasiswa Per Jurusan Per Cabang</h2>
+                            <h2>Grafik Jumlah Mahasiswa Per Jurusan Per Cabang &nbsp;&nbsp;&nbsp;<a href="../../refresh1.php" style="background-color: #05007E !important;" class="btn btn-success">Refresh</a></h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -597,12 +602,6 @@
                             </ul>
                         </div>
                         <div class="body">
-
-
-                        <?php
-                        //echo '<pre>'; print_r($_GET);
-                        ?>
-
                         <form action="grafikmahasiswaperjurusansearch.php" method="get" enctype="multipart/form-data">
                             <div class="row clearfix">
                                     <div class="col-sm-5">
@@ -634,6 +633,14 @@
                                 </div>
                             </div>
                         </form> 
+                        <?php
+                               $tahn = isset($_GET['tahun']) ? $_GET['tahun'] : '';
+                               $cab = isset($_GET['cabang']) ? $_GET['cabang'] : '';
+                               $cabangv2 = isset($_SESSION['cabangparseset']) ? $_SESSION['cabangparseset'] : '';   
+                        ?>
+                        <h4 align="center">Anda Menampilkan Data</h4>
+                        <p align="center"><b> Cabang : <?php echo $cabangv2 ?> &nbsp;&nbsp;&nbsp; Tahun : <?php echo $tahn ?> </b></p>
+                        
                         <hr>
                         <div id="JSFiddle">
                         <div id="piechart"></div>

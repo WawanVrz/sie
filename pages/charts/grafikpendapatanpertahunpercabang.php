@@ -17,6 +17,15 @@
     $_SESSION['tahunset1'] = $tahn1;
     $_SESSION['tahunset2'] = $tahn2;
     $_SESSION['cabangset'] = $cab;
+
+    $querycab='SELECT * FROM tbcabang where id_cab = "'.$cab.'"';
+    $hasilcabang = mysqli_query($db, $querycab) or die (mysqli_error($db)); 
+
+    while ($data = mysqli_fetch_array ($hasilcabang))
+    {
+        $cabangv2=$data['nama_cab'];
+        $_SESSION['cabangparseset'] = $cabangv2;
+    }
 ?>
 <html>
 <head>
@@ -581,7 +590,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Grafik Jumlah Pendapatan Per Tahun Per Cabang</h2>
+                            <h2>Grafik Jumlah Pendapatan Per Tahun Per Cabang &nbsp;&nbsp;&nbsp;<a href="../../refresh3.php" style="background-color: #05007E !important;" class="btn btn-success">Refresh</a></h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -639,6 +648,14 @@
                                 </div>
                             </div>
                         </form> 
+                        <?php
+                                $tahn1 = isset($_GET['tahun1']) ? $_GET['tahun1'] : '';
+                                $tahn2 = isset($_GET['tahun2']) ? $_GET['tahun2'] : '';
+                                $cab = isset($_GET['cabang']) ? $_GET['cabang'] : '';
+                                $cabangv2 = isset($_SESSION['cabangparseset']) ? $_SESSION['cabangparseset'] : '';   
+                        ?>
+                        <h4 align="center">Anda Menampilkan Data</h4>
+                        <p align="center"><b> Cabang : <?php echo $cabangv2 ?> &nbsp;&nbsp;&nbsp; Tahun : <?php echo $tahn1 ?> &nbsp;&nbsp;s/d&nbsp;&nbsp; Tahun : <?php echo $tahn2 ?> </b></p>           
                         <hr>
                         <div id="JSFiddle">
                             <div id="line"></div>
