@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <?php
+    session_start();
 	define('HOST','localhost');
     define('USER','root');
 	define('PASS','');
@@ -12,6 +13,10 @@
     $cab = isset($_GET['cabang']) ? $_GET['cabang'] : '';
     $result = $db->query("SELECT tp.id_jurusan, tj.nama_jurusan, tj.biaya, sum(tj.biaya) as totalbiaya, tp.thn_daftar as tahun from tbpeserta tp JOIN tbjurusan tj ON tj.id_jurusan = tp.id_jurusan JOIN tbcabang tc ON tc.id_cab = tp.id_cab WHERE tp.id_cab = $cab AND tp.thn_daftar BETWEEN $tahn1 AND $tahn2 GROUP by tp.thn_daftar ");
     $resultcabang = $db->query("SELECT * FROM tbcabang");
+
+    $_SESSION['tahunset1'] = $tahn1;
+    $_SESSION['tahunset2'] = $tahn2;
+    $_SESSION['cabangset'] = $cab;
 ?>
 <html>
 <head>
@@ -43,15 +48,58 @@
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
-        <!-- Bootstrap Select Css -->
-        <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
+    <style>
+    .buttons button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    }
 
+    .buttons button:last-child {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    button {
+        color:#111;
+        background-image: linear-gradient(to bottom,#ffffff 0,#777777 100%);
+        background-repeat: repeat-x;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        cursor: pointer;
+        border-width:1px;
+        border-color: #777;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.1);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+    }
+    button:hover{
+        color:#fff;
+        background-image: linear-gradient(to top,#337ab7 0,#265a88 100%);
+    }
+
+    .custom{
+        text-align: center;
+        width: 100%;
+        background: inherit !important;
+        color: #000;
+    }
+    </style>
+
+<script src="../../js/xepOnline.jqPlugin.js"></script>
     <!-- =============================================== FUNCTION GOOGLE CHARTS ================================= -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
+
+    function AddNamespace(){
+            var svg = jQuery('#line');
+            svg.attr("xmlns", "http://www.w3.org/2000/svg");
+            svg.css('overflow','visible');
+     }
 
     function drawChart() {
 
@@ -67,14 +115,19 @@
     ]);
 
     var options = {
-            title: 'Grafik Pendapatan',
+            title: 'Grafik Data Dana Pendapatan Monarch Bali Percabang Pertahun',
             width: 900,
             height: 500,
     };
 
     var chart = new google.visualization.LineChart(document.getElementById('line'));
 
+    google.visualization.events.addListener(chart, 'ready', AddNamespace);
+
     chart.draw(data, options);
+
+    var click="return xepOnline.Formatter.Format('JSFiddle', {render:'download', srctype:'svg'})";
+            jQuery('#buttons').append('<button class="btn btn-info waves-effect custom" onclick="'+ click +'">Export PDF Chart</button>');
     }
     </script>
     <!-- ========================================================================================================= -->
@@ -535,20 +588,13 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                        <li><a href="../../export-data-pemdapatan-percabang-pertahun.php" class="btn btn-info waves-effect custom">Export PDF Data Table</a></li>
+                                        <li><div id="buttons"></div></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
-
-
-                        <?php
-                        //echo '<pre>'; print_r($_GET);
-                        ?>
-
                         <form action="grafikpendapatanpertahunpercabang.php" method="get" enctype="multipart/form-data">
                             <div class="row clearfix">
                                     <div class="col-sm-4">
@@ -593,13 +639,11 @@
                                 </div>
                             </div>
                         </form> 
-                        
                         <hr>
-
-                        <div id="line"></div>
+                        <div id="JSFiddle">
+                            <div id="line"></div>
+                        </div>
                     </div>
-
-                   
                 </div>
                 <!-- #END# Line Chart -->
             </div>

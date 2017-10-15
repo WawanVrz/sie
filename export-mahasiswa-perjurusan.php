@@ -10,7 +10,7 @@
     <p style="padding-left:0px; margin-top:-15px; text-align:center;"> Telp. (0361) 9003675 </p>
     <hr>
     <h3 align="center"> Table Data Mahasiswa Per Jurusan - Monarch Bali </h3>
-    <table border="1" align="center" bordercolor="#ccc" STYLE="BORDER-COLLAPSE:COLLAPSE;" width="50%">
+    <table border="1" align="center" bordercolor="#ccc" STYLE="BORDER-COLLAPSE:COLLAPSE;" width="100%">
     <tr>
         <td align="center" width="10%"><b>No</b></td>
         <td align="center" width="55%"><b>Nama Jurusan</b></td>

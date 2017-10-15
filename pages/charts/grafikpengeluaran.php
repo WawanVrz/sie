@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <?php
 	define('HOST','localhost');
-  define('USER','root');
+    define('USER','root');
 	define('PASS','');
 	define('DB','siedb');
 
@@ -103,7 +103,7 @@
 				]);
 
 				var options = {
-                        title: 'Grafil Data Dana Pengeluaran Monarch Bali Pertahun',
+                        title: 'Grafik Data Dana Pengeluaran Monarch Bali Pertahun',
 						width: 900,
 						height: 500,
 				};
